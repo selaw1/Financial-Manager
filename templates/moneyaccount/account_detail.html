@@ -1,0 +1,98 @@
+{% extends '../base.html' %}
+{% load static%}
+
+{% block custom-css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block title %}{{object.name}}{% endblock %}
+
+{% block nav-title %}
+    {% if object.is_main %}
+        <i class="bi bi-bookmark-star-fill"></i>
+    {% endif %}
+    {{object.name}}
+{% endblock %}
+
+{% block nav-buttons %}
+    <a href="{% url 'mc:account-delete' object.name object.id %}" class="mx-1 btn btn-danger fw-bold">Delete</a>
+    <a href="{% url 'mc:account-update' object.name object.id %}" class="mx-1 btn btn-primary fw-bold">Edit</a>
+    <a class="btn btn-primary fw-bold" href="{% url 'mc:transaction-list' object.name object.id %}">My Transactions</a>
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex mt-5 row py-3 justify-content-around mt-5">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert {{ message.tags }} text-center">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="col-sm-12 col-md-4 col-lg-3 px-3 mx-1 mb-5 mt-2 main-card bg-light">
+        <div class="py-4 px-4 my-2 text-center detail {% if not object.is_main %}mt-5{% endif %}">
+            <h4 class="fw-bold ">Total Balance</h4>
+            <hr>
+            <h5 class="fw-bold text-primary">{{object.total_balance}}</h5>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-4 col-lg-3 px-3 mx-1 mb-5  mt-2 main-card bg-light">
+        <div class="py-4 px-2 my-2 text-center detail {% if not object.is_main %}mt-5{% endif %}">
+            <h4 class="fw-bold ">Total Transactions</h4>
+            <hr>
+            <h5 class="fw-bold text-primary">{{object.transactions.count}}</h5>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-4 col-lg-3 px-3 mx-1 mb-5  mt-2 main-card bg-light">
+        <div class="py-4 px-2 my-2 text-center detail {% if not object.is_main %}mt-5{% endif %}">
+            {% if object.is_main %}
+                <h4 class="fw-bold">
+                    Main Account
+                </h4>
+                <hr>
+                <h5 class="fw-bold ">
+                    <i class="bi bi-bookmark-star-fill"></i>
+                </h5>
+            {% else %}
+                <h4 class="fw-bold">
+                    <a class="text-decoration-none text-danger" href="{% url 'mc:make-main' object.id %}">Make Main Account</a>
+                </h4>
+                <hr>
+                <h5 class="fw-bold ">
+                    <i class="bi bi-bookmark-star-fill"></i>
+                </h5>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-4 col-lg-3 px-3 mx-1 mb-5  mt-2 main-card bg-light">
+        <div class="py-4 px-4 my-2 text-center detail {% if not object.is_main %}mt-5{% endif %}">
+            <h4 class="fw-bold ">Account Type</h4>
+            <hr>
+            <h5 class="fw-bold text-primary">{{object.get_account_type_display}}</h5>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-4 col-lg-3 px-3 mx-1 mb-5  mt-2 main-card bg-light">
+        <div class="py-4 px-2 my-2 text-center detail {% if not object.is_main %}mt-5{% endif %}">
+            <h4 class="fw-bold ">Bank</h4>
+            <hr>
+            <h5 class="fw-bold text-primary">{{object.bank}}</h5>
+        </div>
+    </div>
+
+    <div class="col-sm-12 col-md-4 col-lg-3 px-3 mx-1 mb-5  mt-2 main-card bg-light">
+        <div class="py-4 px-2 my-2 text-center detail {% if not object.is_main %}mt-5{% endif %}">
+            <h4 class="fw-bold ">Latest Transaction</h4>
+            <hr>
+            <h5 class="fw-bold text-primary">{{object.transactions.last.date}}</h5>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

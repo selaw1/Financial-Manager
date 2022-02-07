@@ -1,0 +1,20 @@
+
+
+<form method="GET">
+    <div class="row">
+        <div class="col-lg-4 col-lg-4 col-md-4 col-12 my-1">
+            <input type="search" class="form-control" name="search" placeholder="Search" aria-label="search">
+        </div>
+        <div class="btn-group col-lg-4 col-md-4 col-12 my-1">
+            <select name='filter' class="btn btn-light" aria-label="filter">
+                <option value="" {% if not request.GET.filter %}selected{% endif %}>All</option>
+                <option {% if request.GET.filter == "today" %}selected{% endif %} value="today">Today</option>
+                <option {% if request.GET.filter == "week" %}selected{% endif %} value="week">Last 7 Dyas</option>
+                <option {% if request.GET.filter == "month" %}selected{% endif %} value="month">Last 30 days</option>
+            </select>
+            <button type="submit" class="btn btn-primary fw-bold">
+                Filter
+            </button>
+        </div>
+    </div>
+</form>

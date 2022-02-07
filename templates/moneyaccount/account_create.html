@@ -1,0 +1,31 @@
+{% extends '../base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block custom-css %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block nav-title %}Create Account{% endblock %}
+
+
+
+{% block content %}
+
+<div class="row justify-content-center my-5">
+    <div class="col-lg-7 col-md-12 col-sm-12">
+        <div class="card bg-light form-card">
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <button type="submit" name="create" class="btn btn-primary col-12 my-1 fw-bold">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

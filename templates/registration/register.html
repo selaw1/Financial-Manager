@@ -1,0 +1,36 @@
+{% extends '../base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block custom-css %} 
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block title %}Register Page{% endblock %}
+
+{% block nav-title %}Register{% endblock %}
+
+
+{% block content %}
+
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-12 col-sm-12">
+            <div class="card mt-5 bg-light mb-5 form-card">
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{form|crispy}}
+                        <hr class="mb-0">
+                        <p class="mt-0">
+                            Already Have an Account?
+                            <a href="{% url 'mc:login' %}" class="fw-bold text-decoration-none">Login</a>
+                        </p>
+                        <button type="submit" class="btn btn-primary col-12 my-1 fw-bold">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static%}
+
+{% block custom-css %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block title %}Reports{% endblock %}
+
+{% block nav-title %}Reports {% endblock %}
+
+{% block content %}
+    {{valid}}
+
+    <div class="row justify-content-center my-5">
+        <div class="col-lg-7 col-md-12 col-sm-12 my-5">
+            <div class="card bg-light form-card">
+                <div class="card-body">
+                    {% for account in object_list %}
+                        <form method="POST" action="{% url 'mc:export-report' account.id %}" class="my-5 text-center">
+                            {% csrf_token %}
+                            <h4 class="fw-bold ">{{account.name}}</h4>
+                            <input name="{{account.name}}" value="{{account.name}}" type="hidden">
+                            <button {% if not account.transactions.all %}disabled{% endif %} type="submit" class="btn btn-primary col-6 my-1 fw-bold">
+                                <i class="bi bi-file-earmark-arrow-down-fill"></i>
+                                Download Report
+                            </button>
+                        </form>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

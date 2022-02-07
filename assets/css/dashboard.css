@@ -1,0 +1,20 @@
+.main-card{
+    border-top: 4px solid #000;
+    border-radius: 1%;
+}
+
+.dashboard-info{
+    font-size: 1.2rem;
+    display: inline-block;
+    text-align: left;
+    list-style: none;
+}
+
+.main-icon{
+    font-size: 1.5rem;
+}
+
+.account-info{
+    list-style: none;
+    font-size: 1.2rem;
+}

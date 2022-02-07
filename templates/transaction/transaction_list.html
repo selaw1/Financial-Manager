@@ -1,0 +1,68 @@
+{% extends '../base.html' %}
+{% load static%}
+
+{% block custom-css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block title %}{{view.kwargs.name}} - Transactions{% endblock %}
+
+{% block nav-title %} <a class="text-dark text-decoration-none" href="{% url 'mc:account-detail' view.kwargs.name view.kwargs.account_pk %}">{{view.kwargs.name}}</a> / Transactions {% endblock %}
+
+{% block nav-buttons %}
+    {% include 'filter.html' %} 
+    <a class="btn btn-primary fw-bold my-1" href="{% url 'mc:transaction-create' view.kwargs.name view.kwargs.account_pk %}">Make Transaction</a>
+{% endblock %}
+
+{% block content %}
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert {{ message.tags }} text-center">
+            {{ message }}
+        </div>
+    {% endfor %}
+    {% endif %}
+
+    <div class="table-responsive my-5">
+        {% if object_list %} 
+            <table class="table table-hover table-striped table-sm mb-5 text-center">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Current Balance</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="align-middle">
+                    {% for transaction in object_list %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{transaction.title}}</td>
+                        <td class="{% if transaction.transaction_type == 'payment' %}text-danger{% else %}text-success{% endif %}">{{transaction.current_balance}}</td>
+                        <td class="{% if transaction.transaction_type == 'payment' %}text-danger{% else %}text-success{% endif %}">{{transaction.amount}}</td>
+                        <td class="{% if transaction.transaction_type == 'payment' %}text-danger{% else %}text-success{% endif %}">{{transaction.new_balance}}</td>
+                        <td>{{transaction.date}}</td>
+                        <td>
+                            <a href="{% url 'mc:transaction-detail' transaction.account.name transaction.account.id transaction.id %}" class="btn btn-sm btn-dark m-1"><i class="bi bi-arrow-up-right-square-fill"></i></a>
+                            <form action="{% url 'mc:transaction-delete' transaction.account.name transaction.account.id transaction.id %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-danger m-1"><i class="bi bi-x-square-fill"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            {% if object_list is None %}
+                <h2 class="text-danger text-center card p-5 bg-light mt-5">Invalid Search Bro...</h2>
+            {% else %}
+                <h2 class="text-danger text-center card p-5 bg-light mt-5">No Transactions Available...</h2>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock %}

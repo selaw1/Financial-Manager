@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static%}
+
+{% block custom-css %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block nav-title %}Dashboard {% endblock %}
+
+{% block nav-buttons %}
+    {% include 'filter.html' %} 
+{% endblock %}
+
+{% block content %}
+
+<div class="d-flex row mt-5 py-3 justify-content-around">
+    {% if main_account %}
+        <div class="col-sm-12 col-md-12 col-lg-5 px-3 mb-4 main-card bg-light">
+            <div>
+                <i class="bi bi-bookmark-star-fill main-icon"></i>
+            </div>
+
+            <div class="py-4 px-4 my-2 text-center">
+                <ul class="dashboard-info">
+                    <li><b> Account Name: </b>{{main_account.name|title}}</li>
+                    <li><b> Bank: </b>{{main_account.bank}}</li>
+                    <li><b> Type: </b>{{main_account.get_account_type_display}}</li>
+                </ul>
+                <div class="mt-5">
+                    <a href="{% url 'mc:account-update' main_account.name main_account.id %}" class="col-6 btn btn-primary fw-bold" type="button">Edit</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-5 px-3 mb-4 main-card bg-light">
+            <div>
+                <i class="bi bi-bookmark-star-fill main-icon"></i>
+            </div>
+            <div class=" py-4 px-4 my-2 text-center">
+                <ul class="dashboard-info">
+                    <li><b> Total Balance: </b>{{main_account.total_balance}}</li>
+                    <li><b> Total Transactions: </b>{{main_account.transactions.all.count|default:"--"}}</li>
+                    <li><b> Latest Transaction: </b>{{main_account.transactions.all.0.date|default:"--"}}</li>
+                </ul>
+                <div class="mt-5">
+                    <a href="{% url 'mc:transaction-list' main_account.name main_account.id%}" class="col-6 btn btn-primary fw-bold" type="button">Transactions</a>
+                </div>
+            </div>
+        </div>
+    {% endif%}
+</div>
+
+
+<div class="table-responsive mb-5">
+    {% if valid and transactions %}
+        <table class="table table-hover table-striped table-sm mb-5 text-center">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Account</th>
+                    <th scope="col">Date</th>
+                </tr>
+            </thead>
+            <tbody class="align-middle">
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{transaction.title}}</td>
+                    <td class="{% if transaction.transaction_type == 'payment' %}text-danger{% else %}text-success{% endif %}">{{transaction.amount}}</td>
+                    <td>{{transaction.account}}</td>
+                    <td>{{transaction.date}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        {% if not valid %}
+            <h2 class="text-danger text-center card p-5 bg-light mt-5">Invalid Search Bro...</h2>
+        {% else %}
+            <h2 class="text-danger text-center card p-5 bg-light mt-5">No Transactions Available...</h2>
+        {% endif %}
+    {% endif %}
+</div>
+
+{% endblock %}

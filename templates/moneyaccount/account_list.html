@@ -1,0 +1,57 @@
+{% extends '../base.html' %}
+{% load static%}
+
+{% block custom-css %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block title %}Accounts{% endblock %}
+
+{% block nav-title %}My Accounts{% endblock %}
+
+{% block nav-buttons %}
+    <a class="btn btn-primary fw-bold" href="{% url 'mc:account-create' %}">Create Account</a>
+{% endblock %}
+
+{% block content %}
+
+    <div class="d-flex mt-5 row py-3 justify-content-around">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags }} text-center">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+            
+        {% if object_list %}
+            {% for account in object_list %}
+                <div class="col-sm-12 col-md-12 col-lg-5 px-3 mb-4 main-card bg-light">
+                    {% if account.is_main %}
+                        <div class="mt-1">
+                            <i class="bi bi-bookmark-star-fill main-icon"></i>
+                        </div>
+                    {% endif %}
+
+                    <div class="py-4 px-4 my-2 text-center detail h-50 {% if not account.is_main %}mt-5{% endif %}">
+                        <ul class="account-info">
+                            <li><b>{{account.name|title}}</b></li>
+                            <li class="{% if account.total_balance < 0 %}text-danger{% else %}text-success{% endif %}"><b>{{account.total_balance}}</b></li>
+                            <hr>
+                            <li><b>{{account.get_account_type_display}} Account</b></li>
+                        </ul>
+                        <div class="mt-5 row justify-content-around">
+                            <a href="{% url 'mc:account-update' account.name account.id %}" class="col-md-12 col-sm-12 col-lg-5 mb-1 btn btn-primary fw-bold" type="button">Edit</a>
+                            <a href="{% url 'mc:account-detail' account.name account.id %}" class="col-md-12 col-sm-12 col-lg-5 mb-1 btn btn-primary fw-bold" type="button">Details</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h2 class="text-danger text-center card p-5 bg-light mt-5">No Accounts Available...</h2>
+        {% endif %}
+                
+    </div>
+
+{% endblock %}

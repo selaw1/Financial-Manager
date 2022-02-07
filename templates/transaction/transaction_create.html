@@ -1,0 +1,35 @@
+{% extends '../base.html' %}
+{% load static%}
+{% load crispy_forms_tags %}
+
+{% block custom-css %}
+<link rel="stylesheet" href="{% static 'css/forms.css' %}">
+{% endblock %}
+
+{% block title %}Make Transaction{% endblock %}
+
+{% block nav-title %}Make Transaction{% endblock %}
+
+{% block content %}
+
+    <div class="row justify-content-center my-5">
+        <div class="col-lg-7 col-md-12 col-sm-12">
+            <div class="card bg-light form-card">
+                <div class= "p-4 text-center">
+                    <h5><b>Account: </b> {{account}}</h5>
+                    <h5><b>Total_balance: </b> {{account.total_balance}}</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{form|crispy}}
+                        <hr>
+                        <button type="submit" name="payment" class="btn btn-danger col-12 my-1 fw-bold">Payment</button>
+                        <button type="submit" name="deposit" class="btn btn-dark col-12 my-1 fw-bold">Deposit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
