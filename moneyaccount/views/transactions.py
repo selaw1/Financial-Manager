@@ -108,7 +108,7 @@ class TransactionDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView)
     def form_valid(self, form):
         transaction = self.get_object()
         account = MoneyAccount.objects.get(id=self.kwargs['account_pk'])
-
+        print(account)
         if transaction.transaction_type == TransactionTypes.PAYMENT:
             account.total_balance = F("total_balance") + transaction.amount 
             account.save()
